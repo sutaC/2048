@@ -1,10 +1,12 @@
 package com.example.a2048;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,12 +15,20 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView[] board = new TextView[16];
+    // Data
     int[][] boardInt = new int[][]{{0, 0, 0, 0},{0, 0, 0, 0},{0, 0, 0, 0},{0, 0, 0, 0}};
-
     String[] colorPalet = new String[]{"#FFFFFF", "#B32821", "#D84B20", "#606E8C", "#E1CC4F", "#6A5F31", "#3D642D", "#008F39", "#6C7059", "#B8B799", "#D36E70"};
+
+    // Android objects
+    TextView[] board = new TextView[16];
+
     TextView tvGameState;
     Button btnTop, btnRight, btnBottom, btnLeft;
+
+
+    // Shared Preferences
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String BOARD = "board";
 
 
     @Override
@@ -51,7 +61,10 @@ public class MainActivity extends AppCompatActivity {
         tvGameState = findViewById(R.id.tvGameState);
 
         // Start a game
-        generateNewCells(2, 4);
+        if(!loadData()){
+            generateNewCells(2, 4);
+        }
+
         displayFiles();
         checkActions();
     }
@@ -142,6 +155,55 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    // Data storage
+
+    private String generateStringBoardData(){
+        String boardData = "";
+        for(int i = 0; i < boardInt.length; i++){
+            for (int j = 0; j < boardInt[i].length; j++){
+                boardData = boardData + boardInt[i][j] + "/";
+            }
+        }
+        return boardData;
+    }
+    private int[][] readStringBoardData(String boardData){
+        int[][] newBoard = new int[][]{{0, 0, 0, 0},{0, 0, 0, 0},{0, 0, 0, 0},{0, 0, 0, 0}};
+
+        String[] values = boardData.split("/");
+
+        int iterator = 0;
+
+        for (int i = 0; i < newBoard.length; i++){
+            for (int j = 0; j < newBoard[i].length; j++){
+                newBoard[i][j] = Integer.parseInt(values[iterator]);
+                iterator++;
+            }
+        }
+
+        return newBoard;
+    }
+
+    private void saveData(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        String data = generateStringBoardData();
+
+        editor.putString(BOARD, data);
+
+        editor.apply();
+    }
+    private boolean loadData(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String boardData = sharedPreferences.getString(BOARD, "");
+
+        if(!boardData.equals("")){
+            boardInt = readStringBoardData(boardData);
+            return true;
+        }
+
+        return false;
+    }
 
     // Check game actions
 
@@ -359,6 +421,8 @@ public class MainActivity extends AppCompatActivity {
             // Lose
             tvGameState.setText(R.string.game_over);
         }
+
+        saveData();
     }
 
     public void gameActionRight(View view) {
@@ -412,6 +476,8 @@ public class MainActivity extends AppCompatActivity {
             // Lose
             tvGameState.setText(R.string.game_over);
         }
+
+        saveData();
     }
 
     public void gameActionBottom(View view) {
@@ -464,6 +530,8 @@ public class MainActivity extends AppCompatActivity {
             // Lose
             tvGameState.setText(R.string.game_over);
         }
+
+        saveData();
     }
 
     public void gameActionLeft(View view) {
@@ -516,6 +584,8 @@ public class MainActivity extends AppCompatActivity {
             // Lose
             tvGameState.setText(R.string.game_over);
         }
+
+        saveData();
     }
 
     public void gameReset(View view) {
@@ -528,5 +598,7 @@ public class MainActivity extends AppCompatActivity {
         checkActions();
 
         tvGameState.setText("---");
+
+        saveData();
     }
 }
