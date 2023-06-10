@@ -8,4 +8,5 @@
     <string name="gameActionReset">Reset</string>
     <string name="game_over">Game Over!</string>
     <string name="you_won">You Won!</string>
+    <string name="Devider">/</string>
 </resources>

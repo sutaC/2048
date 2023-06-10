@@ -3,6 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="ic_launcher_background">#F237F1</color>
     <color name="white">#FFFFFFFF</color>
+    <string name="Devider">/</string>
     <string name="app_name">2048</string>
     <string name="empty">-</string>
     <string name="gameActionBottom">Bottom</string>

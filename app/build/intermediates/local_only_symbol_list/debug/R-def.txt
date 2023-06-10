@@ -32,6 +32,7 @@ layout activity_main
 mipmap ic_launcher
 mipmap ic_launcher_foreground
 mipmap ic_launcher_round
+string Devider
 string app_name
 string empty
 string gameActionBottom
