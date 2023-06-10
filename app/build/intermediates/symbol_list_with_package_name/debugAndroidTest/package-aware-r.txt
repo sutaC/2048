@@ -1,0 +1,3 @@
+com.example.a2048.test
+style WhiteBackgroundDialogTheme
+style WhiteBackgroundTheme

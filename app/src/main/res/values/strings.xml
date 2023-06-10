@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">2048</string>
+    <string name="empty">-</string>
+    <string name="gameActionRight">Right</string>
+    <string name="gameActionBottom">Bottom</string>
+    <string name="gameActionLeft">Left</string>
+    <string name="gameActionTop">Top</string>
+    <string name="gameActionReset">Reset</string>
+    <string name="game_over">Game Over!</string>
+    <string name="you_won">You Won!</string>
+</resources>

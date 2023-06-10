@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#6600BCD4"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/tvGameState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/empty"
+        android:textAlignment="center"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="50dp"
+        android:background="#FFFFFF"
+        android:padding="10dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvGameState"
+        app:useDefaultMargins="true">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="50dp"
+            android:height="50dp"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_column="0"
+            app:layout_gravity="center"
+            app:layout_row="0" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="50dp"
+            android:height="50dp"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_column="1"
+            app:layout_gravity="center"
+            app:layout_row="0" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="50dp"
+            android:height="50dp"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_column="2"
+            app:layout_gravity="center"
+            app:layout_row="0" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="50dp"
+            android:height="50dp"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_column="3"
+            app:layout_gravity="center"
+            app:layout_row="0" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="50dp"
+            android:height="50dp"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_column="0"
+            app:layout_gravity="center"
+            app:layout_row="1" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="50dp"
+            android:height="50dp"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_column="1"
+            app:layout_gravity="center"
+            app:layout_row="1" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="50dp"
+            android:height="50dp"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_column="2"
+            app:layout_gravity="center"
+            app:layout_row="1" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="50dp"
+            android:height="50dp"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_column="3"
+            app:layout_gravity="center"
+            app:layout_row="1" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="50dp"
+            android:height="50dp"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_column="0"
+            app:layout_gravity="center"
+            app:layout_row="2" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="50dp"
+            android:height="50dp"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_column="1"
+            app:layout_gravity="center"
+            app:layout_row="2" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="50dp"
+            android:height="50dp"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_column="2"
+            app:layout_gravity="center"
+            app:layout_row="2" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="50dp"
+            android:height="50dp"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_column="3"
+            app:layout_gravity="center"
+            app:layout_row="2" />
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="50dp"
+            android:height="50dp"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_column="0"
+            app:layout_gravity="center"
+            app:layout_row="3" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="50dp"
+            android:height="50dp"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_column="1"
+            app:layout_gravity="center"
+            app:layout_row="3" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="50dp"
+            android:height="50dp"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_column="2"
+            app:layout_gravity="center"
+            app:layout_row="3" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:width="50dp"
+            android:height="50dp"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_column="3"
+            app:layout_gravity="center"
+            app:layout_row="3" />
+
+    </androidx.gridlayout.widget.GridLayout>
+
+    <androidx.gridlayout.widget.GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#662196F3"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/btnReset"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gridLayout">
+
+        <Button
+            android:id="@+id/btnTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="65dp"
+            android:height="65dp"
+            android:backgroundTint="#009688"
+            android:contentDescription="@string/gameActionTop"
+            android:enabled="false"
+            android:minWidth="48dip"
+            android:onClick="gameActionTop"
+            android:rotation="-90"
+            app:icon="@android:drawable/ic_media_play"
+            app:layout_column="2"
+            app:layout_row="1" />
+
+        <Button
+            android:id="@+id/btnLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="65dp"
+            android:height="65dp"
+            android:backgroundTint="#009688"
+            android:contentDescription="@string/gameActionLeft"
+            android:enabled="false"
+            android:minWidth="48dip"
+            android:onClick="gameActionLeft"
+            android:rotation="180"
+            app:icon="@android:drawable/ic_media_play"
+            app:layout_column="1"
+            app:layout_row="2" />
+
+        <Button
+            android:id="@+id/btnBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="65dp"
+            android:height="65dp"
+            android:backgroundTint="#009688"
+            android:contentDescription="@string/gameActionBottom"
+            android:enabled="false"
+            android:minWidth="48dip"
+            android:onClick="gameActionBottom"
+            android:rotation="90"
+            app:icon="@android:drawable/ic_media_play"
+            app:layout_column="2"
+            app:layout_row="3" />
+
+        <Button
+            android:id="@+id/btnRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="65dp"
+            android:height="65dp"
+            android:backgroundTint="#009688"
+            android:contentDescription="@string/gameActionRight"
+            android:enabled="false"
+            android:minWidth="48dip"
+            android:onClick="gameActionRight"
+            app:icon="@android:drawable/ic_media_play"
+            app:layout_column="3"
+            app:layout_row="2" />
+    </androidx.gridlayout.widget.GridLayout>
+
+    <Button
+        android:id="@+id/btnReset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:backgroundTint="#009688"
+        android:onClick="gameReset"
+        android:text="@string/gameActionReset"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="VisualLintButtonSize,TextContrastCheck" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
