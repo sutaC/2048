@@ -30,17 +30,14 @@ public class MainActivity extends AppCompatActivity {
         board[1] = findViewById(R.id.textView2);
         board[2] = findViewById(R.id.textView3);
         board[3] = findViewById(R.id.textView4);
-
         board[4] = findViewById(R.id.textView5);
         board[5] = findViewById(R.id.textView6);
         board[6] = findViewById(R.id.textView7);
         board[7] = findViewById(R.id.textView8);
-
         board[8] = findViewById(R.id.textView9);
         board[9] = findViewById(R.id.textView10);
         board[10] = findViewById(R.id.textView11);
         board[11] = findViewById(R.id.textView12);
-
         board[12] = findViewById(R.id.textView13);
         board[13] = findViewById(R.id.textView14);
         board[14] = findViewById(R.id.textView15);
@@ -52,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
         btnLeft = findViewById(R.id.btnLeft);
 
         tvGameState = findViewById(R.id.tvGameState);
+
+        // Start a game
+        generateNewCells(2, 4);
+        displayFiles();
+        checkActions();
     }
 
     // Game functions
@@ -105,17 +107,16 @@ public class MainActivity extends AppCompatActivity {
             int cell = random.nextInt(2) + 1;
             cell = (int) Math.pow(2, cell);
 
+            do {
 
-                do {
+                indexX = random.nextInt(4);
+                indexY = random.nextInt(4);
+            } while (boardInt[indexX][indexY] > 0);
 
-                    indexX = random.nextInt(4);
-                    indexY = random.nextInt(4);
-                } while (boardInt[indexX][indexY] > 0);
+            boardInt[indexX][indexY] = (cell);
 
-                boardInt[indexX][indexY] = (cell);
-
-            }
         }
+    }
 
     private boolean checkEnd(){
         for (int i = 0; i < 4; i++) {
@@ -524,11 +525,7 @@ public class MainActivity extends AppCompatActivity {
         }
         generateNewCells(2, 4);
         displayFiles();
-
-        btnTop.setEnabled(true);
-        btnRight.setEnabled(true);
-        btnBottom.setEnabled(true);
-        btnLeft.setEnabled(true);
+        checkActions();
 
         tvGameState.setText("---");
     }

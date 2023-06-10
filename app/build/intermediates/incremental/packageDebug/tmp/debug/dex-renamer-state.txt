@@ -1,4 +1,4 @@
-#Sat Jun 10 13:57:46 CEST 2023
+#Sat Jun 10 14:08:04 CEST 2023
 base.0=C\:\\Users\\48570\\OneDrive\\Dokumenty\\Programing\\Aplikacje Mobilne\\2048\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=C\:\\Users\\48570\\OneDrive\\Dokumenty\\Programing\\Aplikacje Mobilne\\2048\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
 base.2=C\:\\Users\\48570\\OneDrive\\Dokumenty\\Programing\\Aplikacje Mobilne\\2048\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\9\\classes.dex
