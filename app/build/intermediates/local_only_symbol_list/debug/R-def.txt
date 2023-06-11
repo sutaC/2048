@@ -27,12 +27,17 @@ id textView6
 id textView7
 id textView8
 id textView9
+id tvBestScore
 id tvGameState
+id tvScore
 layout activity_main
 mipmap ic_launcher
 mipmap ic_launcher_foreground
 mipmap ic_launcher_round
+string Devider
 string app_name
+string basic_best_score
+string basic_score
 string empty
 string gameActionBottom
 string gameActionLeft
@@ -42,6 +47,8 @@ string gameActionTop
 string game_over
 string you_won
 style Base.Theme.2048
+style BoardField
 style Theme.2048
+style controllerButton
 xml backup_rules
 xml data_extraction_rules

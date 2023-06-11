@@ -3,7 +3,10 @@
     <color name="black">#FF000000</color>
     <color name="ic_launcher_background">#F237F1</color>
     <color name="white">#FFFFFFFF</color>
+    <string name="Devider">/</string>
     <string name="app_name">2048</string>
+    <string name="basic_best_score">Best Score: 0</string>
+    <string name="basic_score">Score: 0</string>
     <string name="empty">-</string>
     <string name="gameActionBottom">Bottom</string>
     <string name="gameActionLeft">Left</string>
@@ -16,5 +19,25 @@
         
         
     </style>
+    <style name="BoardField">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:width">50dp</item>
+        <item name="android:height">50dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/empty</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">18sp</item>
+    </style>
     <style name="Theme.2048" parent="Base.Theme.2048"/>
+    <style name="controllerButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:width">65dp</item>
+        <item name="android:height">65dp</item>
+        <item name="android:backgroundTint">#009688</item>
+        <item name="android:enabled">false</item>
+        <item name="android:minWidth">48dip</item>
+        <item name="android:icon">@android:drawable/ic_media_play</item>
+    </style>
 </resources>
