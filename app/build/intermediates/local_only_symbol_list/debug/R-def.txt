@@ -5,12 +5,9 @@ color ic_launcher_background
 color white
 drawable ic_launcher_background
 drawable ic_launcher_foreground
-id btnBottom
-id btnLeft
 id btnReset
-id btnRight
-id btnTop
 id gridLayout
+id layoutMain
 id textView1
 id textView10
 id textView11
@@ -49,6 +46,5 @@ string you_won
 style Base.Theme.2048
 style BoardField
 style Theme.2048
-style controllerButton
 xml backup_rules
 xml data_extraction_rules

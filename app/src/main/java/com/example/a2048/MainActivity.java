@@ -4,10 +4,15 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import game.mechanics.Game;
 import game.mechanics.GameState;
@@ -15,13 +20,20 @@ import game.mechanics.GameState;
 public class MainActivity extends AppCompatActivity {
 
     // Android objects
+    ConstraintLayout layoutMain;
     TextView[] board = new TextView[16];
     TextView tvGameState, tvScore, tvBestScore;
-    Button btnTop, btnRight, btnBottom, btnLeft, btnReset;
+    Button btnReset;
 
-    // Game objects
+    // Objects
+
     Game game;
     Storage storage;
+    SwipeListener swipeListener;
+
+    // Data
+
+    boolean actionTopAvaliable, actionRightAvaliable, actionBottomAvaliable, actionLeftAvaliable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +58,13 @@ public class MainActivity extends AppCompatActivity {
             board[14] = findViewById(R.id.textView15);
             board[15] = findViewById(R.id.textView16);
 
-            btnTop = findViewById(R.id.btnTop);
-            btnRight = findViewById(R.id.btnRight);
-            btnBottom = findViewById(R.id.btnBottom);
-            btnLeft = findViewById(R.id.btnLeft);
             btnReset = findViewById(R.id.btnReset);
 
             tvGameState = findViewById(R.id.tvGameState);
             tvScore = findViewById(R.id.tvScore);
             tvBestScore = findViewById(R.id.tvBestScore);
+
+            layoutMain = findViewById(R.id.layoutMain);
         }
 
         /* Game setup */ {
@@ -70,11 +80,8 @@ public class MainActivity extends AppCompatActivity {
             displayGameState(game.getGameState());
         }
 
-        /* Buttons action listeners */ {
-            btnTop.setOnClickListener(v -> displayGameState(game.gameActionTop()));
-            btnRight.setOnClickListener(v -> displayGameState(game.gameActionRight()));
-            btnBottom.setOnClickListener(v -> displayGameState(game.gameActionBottom()));
-            btnLeft.setOnClickListener(v -> displayGameState(game.gameActionLeft()));
+        /* Action listeners */ {
+            swipeListener = new SwipeListener(layoutMain);
             btnReset.setOnClickListener(v -> displayGameState(game.gameActionReset()));
         }
     }
@@ -84,10 +91,14 @@ public class MainActivity extends AppCompatActivity {
     private void displayGameState(GameState state){
 
         // Set buttons availability
-        btnTop.setEnabled(state.actionTopAvaliable);
-        btnRight.setEnabled(state.actionRightAvaliable);
-        btnBottom.setEnabled(state.actionBottomAvaliable);
-        btnLeft.setEnabled(state.actionLeftAvaliable);
+        actionTopAvaliable = state.actionTopAvaliable;
+        actionRightAvaliable = state.actionRightAvaliable;
+        actionBottomAvaliable = state.actionBottomAvaliable;
+        actionLeftAvaliable = state.actionLeftAvaliable;
+//        btnTop.setEnabled(state.actionTopAvaliable);
+//        btnRight.setEnabled(state.actionRightAvaliable);
+//        btnBottom.setEnabled(state.actionBottomAvaliable);
+//        btnLeft.setEnabled(state.actionLeftAvaliable);
 
         // Display game state text
         switch (state.gameEnd){
@@ -142,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Sets Best Score
         int bestScore = storage.loadBestScore();
+
         if(bestScore < state.score){
             storage.saveBestScore(state.score);
             tvBestScore.setText("Best Score: " + state.score);
@@ -156,7 +168,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public class Storage {
+    // Inner classes
+    private final class Storage {
+
+
         /* Saving game data */
         private static final String SHARED_PREFS = "sharedPrefs";
         private static final String BOARD = "board";
@@ -228,5 +243,76 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
             return sharedPreferences.getInt(BEST_SCORE, 0);
         }
+    }
+
+    private final class SwipeListener implements View.OnTouchListener {
+        // Initialization
+        GestureDetector gestureDetector;
+
+        @SuppressWarnings("deprecation")
+        public SwipeListener(View view){
+            int threshold = 100;
+            int velocity_threshold = 100;
+
+            GestureDetector.SimpleOnGestureListener listener =
+                new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onDown(@NonNull MotionEvent e) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
+                        float xDiff = e2.getX() - e1.getX();
+                        float yDiff = e2.getY() - e1.getY();
+
+                        try {
+                            if (Math.abs(xDiff) > Math.abs((yDiff))){
+                                if(Math.abs(xDiff) > threshold && Math.abs(velocityX) > velocity_threshold){
+                                    if(xDiff > 0){
+                                        // Swipe right
+                                        if(actionRightAvaliable){
+                                            displayGameState(game.gameActionRight());
+                                        }
+                                    } else {
+                                        // Swipe left
+                                        if(actionLeftAvaliable){
+                                            displayGameState(game.gameActionLeft());
+                                        }
+                                    }
+                                    return true;
+                                }
+                            } else {
+                                if (Math.abs(yDiff) > threshold && Math.abs(velocityY) > velocity_threshold) {
+                                    if (yDiff > 0) {
+                                        // Swipe down
+                                        if(actionBottomAvaliable){
+                                            displayGameState(game.gameActionBottom());
+                                        }
+                                    } else {
+                                        // Swipe up
+                                        if(actionTopAvaliable){
+                                            displayGameState(game.gameActionTop());
+                                        }
+                                    }
+                                    return true;
+                                }
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        return false;
+                    }
+                };
+
+            gestureDetector = new GestureDetector(listener);
+            view.setOnTouchListener(this);
+        }
+        @SuppressLint("ClickableViewAccessibility")
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return gestureDetector.onTouchEvent(event);
+        }
+
     }
 }
