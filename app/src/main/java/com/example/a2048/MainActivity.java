@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     ConstraintLayout layoutMain;
     TextView[] board = new TextView[16];
     TextView tvGameState, tvScore, tvBestScore;
-    Button btnTop, btnRight, btnBottom, btnLeft, btnReset;
+    Button btnReset;
 
     // Objects
 
@@ -58,10 +58,6 @@ public class MainActivity extends AppCompatActivity {
             board[14] = findViewById(R.id.textView15);
             board[15] = findViewById(R.id.textView16);
 
-            btnTop = findViewById(R.id.btnTop);
-            btnRight = findViewById(R.id.btnRight);
-            btnBottom = findViewById(R.id.btnBottom);
-            btnLeft = findViewById(R.id.btnLeft);
             btnReset = findViewById(R.id.btnReset);
 
             tvGameState = findViewById(R.id.tvGameState);
@@ -72,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         /* Game setup */ {
-            int[][] savedBoardData = null; //storage.loadBoardData();
+            storage = new Storage();
+
+            int[][] savedBoardData = storage.loadBoardData();
             if (savedBoardData == null) {
                 game = new Game();
             } else {
@@ -82,14 +80,9 @@ public class MainActivity extends AppCompatActivity {
             displayGameState(game.getGameState());
         }
 
-        /* Buttons action listeners */ {
-//            btnTop.setOnClickListener(v -> displayGameState(game.gameActionTop()));
-//            btnRight.setOnClickListener(v -> displayGameState(game.gameActionRight()));
-//            btnBottom.setOnClickListener(v -> displayGameState(game.gameActionBottom()));
-//            btnLeft.setOnClickListener(v -> displayGameState(game.gameActionLeft()));
-//            btnReset.setOnClickListener(v -> displayGameState(game.gameActionReset()));
-
+        /* Action listeners */ {
             swipeListener = new SwipeListener(layoutMain);
+            btnReset.setOnClickListener(v -> displayGameState(game.gameActionReset()));
         }
     }
 
@@ -159,10 +152,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Sets Best Score
+        int bestScore = storage.loadBestScore();
 
-        if(storage.loadBestScore() < state.score){
+        if(bestScore < state.score){
             storage.saveBestScore(state.score);
             tvBestScore.setText("Best Score: " + state.score);
+        } else {
+            tvBestScore.setText("Best Score: " + bestScore);
         }
 
         // Saves game state
@@ -170,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         storage.saveScore(state.score);
 
     }
+
 
     // Inner classes
     private final class Storage {
@@ -252,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialization
         GestureDetector gestureDetector;
 
+        @SuppressWarnings("deprecation")
         public SwipeListener(View view){
             int threshold = 100;
             int velocity_threshold = 100;
