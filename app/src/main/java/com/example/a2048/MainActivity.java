@@ -16,13 +16,12 @@ public class MainActivity extends AppCompatActivity {
 
     // Android objects
     TextView[] board = new TextView[16];
-
     TextView tvGameState, tvScore, tvBestScore;
     Button btnTop, btnRight, btnBottom, btnLeft, btnReset;
 
-    // Game
-
+    // Game objects
     Game game;
+    Storage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +58,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         /* Game setup */ {
-            int[][] savedBoardData = loadBoardData();
+            storage = new Storage();
+
+            int[][] savedBoardData = storage.loadBoardData();
             if (savedBoardData == null) {
                 game = new Game();
             } else {
-                game = new Game(savedBoardData, loadScore());
+                game = new Game(savedBoardData, storage.loadScore());
             }
 
             displayGameState(game.getGameState());
@@ -140,85 +141,92 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Sets Best Score
-
-        if(loadBestScore() < state.score){
-            saveBestScore(state.score);
+        int bestScore = storage.loadBestScore();
+        if(bestScore < state.score){
+            storage.saveBestScore(state.score);
             tvBestScore.setText("Best Score: " + state.score);
+        } else {
+            tvBestScore.setText("Best Score: " + bestScore);
         }
 
         // Saves game state
-        saveBoardData(state.gameBoard);
-        saveScore(state.score);
+        storage.saveBoardData(state.gameBoard);
+        storage.saveScore(state.score);
 
     }
 
 
-    /* Saving game data */
-    private static final String SHARED_PREFS = "sharedPrefs";
-    private static final String BOARD = "board";
-    private  static  final  String SCORE = "score";
-    private  static  final  String BEST_SCORE = "bestScore";
+    public class Storage {
+        /* Saving game data */
+        private static final String SHARED_PREFS = "sharedPrefs";
+        private static final String BOARD = "board";
+        private static final String SCORE = "score";
+        private static final String BEST_SCORE = "bestScore";
 
-    // Board
-    public void saveBoardData ( int[][] boardData){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        // Board
+        public void saveBoardData(int[][] boardData) {
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
 
 
-        StringBuilder boardToSave = new StringBuilder();
-        for (int[] fieldsY : boardData) {
-            for (int fieldsX : fieldsY) {
-                boardToSave.append(fieldsX).append("/");
+            StringBuilder boardToSave = new StringBuilder();
+            for (int[] fieldsY : boardData) {
+                for (int fieldsX : fieldsY) {
+                    boardToSave.append(fieldsX).append("/");
+                }
             }
+
+
+            editor.putString(BOARD, boardToSave.toString());
+            editor.apply();
         }
 
+        public int[][] loadBoardData() {
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            String boardData = sharedPreferences.getString(BOARD, null);
 
-        editor.putString(BOARD, boardToSave.toString());
-        editor.apply();
-    }
-    public int[][] loadBoardData() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        String boardData = sharedPreferences.getString(BOARD, null);
-
-        if (boardData == null) {
-            return null;
-        }
-
-        int[][] newBoard = new int[][]{{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
-        String[] values = boardData.split(getString(R.string.Devider));
-
-        int iterator = 0;
-        for (int i = 0; i < newBoard.length; i++) {
-            for (int j = 0; j < newBoard[i].length; j++) {
-                newBoard[i][j] = Integer.parseInt(values[iterator]);
-                iterator++;
+            if (boardData == null) {
+                return null;
             }
+
+            int[][] newBoard = new int[][]{{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
+            String[] values = boardData.split(getString(R.string.Devider));
+
+            int iterator = 0;
+            for (int i = 0; i < newBoard.length; i++) {
+                for (int j = 0; j < newBoard[i].length; j++) {
+                    newBoard[i][j] = Integer.parseInt(values[iterator]);
+                    iterator++;
+                }
+            }
+
+            return newBoard;
         }
 
-        return newBoard;
-    }
+        // Score
+        public void saveScore(int score) {
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(SCORE, score);
+            editor.apply();
+        }
 
-    // Score
-    public void saveScore(int score){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(SCORE, score);
-        editor.apply();
-    }
-    public int loadScore(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        return sharedPreferences.getInt(SCORE, 0);
-    }
+        public int loadScore() {
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            return sharedPreferences.getInt(SCORE, 0);
+        }
 
-    // Best Score
-    public void saveBestScore(int bestScore){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(BEST_SCORE, bestScore);
-        editor.apply();
-    }
-    public int loadBestScore(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        return sharedPreferences.getInt(BEST_SCORE, 0);
+        // Best Score
+        public void saveBestScore(int bestScore) {
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(BEST_SCORE, bestScore);
+            editor.apply();
+        }
+
+        public int loadBestScore() {
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            return sharedPreferences.getInt(BEST_SCORE, 0);
+        }
     }
 }
