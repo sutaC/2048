@@ -4,10 +4,15 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import game.mechanics.Game;
 import game.mechanics.GameState;
@@ -15,14 +20,20 @@ import game.mechanics.GameState;
 public class MainActivity extends AppCompatActivity {
 
     // Android objects
+    ConstraintLayout layoutMain;
     TextView[] board = new TextView[16];
-
     TextView tvGameState, tvScore, tvBestScore;
     Button btnTop, btnRight, btnBottom, btnLeft, btnReset;
 
-    // Game
+    // Objects
 
     Game game;
+    Storage storage;
+    SwipeListener swipeListener;
+
+    // Data
+
+    boolean actionTopAvaliable, actionRightAvaliable, actionBottomAvaliable, actionLeftAvaliable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,25 +67,29 @@ public class MainActivity extends AppCompatActivity {
             tvGameState = findViewById(R.id.tvGameState);
             tvScore = findViewById(R.id.tvScore);
             tvBestScore = findViewById(R.id.tvBestScore);
+
+            layoutMain = findViewById(R.id.layoutMain);
         }
 
         /* Game setup */ {
-            int[][] savedBoardData = loadBoardData();
+            int[][] savedBoardData = null; //storage.loadBoardData();
             if (savedBoardData == null) {
                 game = new Game();
             } else {
-                game = new Game(savedBoardData, loadScore());
+                game = new Game(savedBoardData, storage.loadScore());
             }
 
             displayGameState(game.getGameState());
         }
 
         /* Buttons action listeners */ {
-            btnTop.setOnClickListener(v -> displayGameState(game.gameActionTop()));
-            btnRight.setOnClickListener(v -> displayGameState(game.gameActionRight()));
-            btnBottom.setOnClickListener(v -> displayGameState(game.gameActionBottom()));
-            btnLeft.setOnClickListener(v -> displayGameState(game.gameActionLeft()));
-            btnReset.setOnClickListener(v -> displayGameState(game.gameActionReset()));
+//            btnTop.setOnClickListener(v -> displayGameState(game.gameActionTop()));
+//            btnRight.setOnClickListener(v -> displayGameState(game.gameActionRight()));
+//            btnBottom.setOnClickListener(v -> displayGameState(game.gameActionBottom()));
+//            btnLeft.setOnClickListener(v -> displayGameState(game.gameActionLeft()));
+//            btnReset.setOnClickListener(v -> displayGameState(game.gameActionReset()));
+
+            swipeListener = new SwipeListener(layoutMain);
         }
     }
 
@@ -83,10 +98,14 @@ public class MainActivity extends AppCompatActivity {
     private void displayGameState(GameState state){
 
         // Set buttons availability
-        btnTop.setEnabled(state.actionTopAvaliable);
-        btnRight.setEnabled(state.actionRightAvaliable);
-        btnBottom.setEnabled(state.actionBottomAvaliable);
-        btnLeft.setEnabled(state.actionLeftAvaliable);
+        actionTopAvaliable = state.actionTopAvaliable;
+        actionRightAvaliable = state.actionRightAvaliable;
+        actionBottomAvaliable = state.actionBottomAvaliable;
+        actionLeftAvaliable = state.actionLeftAvaliable;
+//        btnTop.setEnabled(state.actionTopAvaliable);
+//        btnRight.setEnabled(state.actionRightAvaliable);
+//        btnBottom.setEnabled(state.actionBottomAvaliable);
+//        btnLeft.setEnabled(state.actionLeftAvaliable);
 
         // Display game state text
         switch (state.gameEnd){
@@ -141,84 +160,161 @@ public class MainActivity extends AppCompatActivity {
 
         // Sets Best Score
 
-        if(loadBestScore() < state.score){
-            saveBestScore(state.score);
+        if(storage.loadBestScore() < state.score){
+            storage.saveBestScore(state.score);
             tvBestScore.setText("Best Score: " + state.score);
         }
 
         // Saves game state
-        saveBoardData(state.gameBoard);
-        saveScore(state.score);
+        storage.saveBoardData(state.gameBoard);
+        storage.saveScore(state.score);
 
     }
 
-
-    /* Saving game data */
-    private static final String SHARED_PREFS = "sharedPrefs";
-    private static final String BOARD = "board";
-    private  static  final  String SCORE = "score";
-    private  static  final  String BEST_SCORE = "bestScore";
-
-    // Board
-    public void saveBoardData ( int[][] boardData){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+    // Inner classes
+    private final class Storage {
 
 
-        StringBuilder boardToSave = new StringBuilder();
-        for (int[] fieldsY : boardData) {
-            for (int fieldsX : fieldsY) {
-                boardToSave.append(fieldsX).append("/");
+        /* Saving game data */
+        private static final String SHARED_PREFS = "sharedPrefs";
+        private static final String BOARD = "board";
+        private static final String SCORE = "score";
+        private static final String BEST_SCORE = "bestScore";
+
+        // Board
+        public void saveBoardData(int[][] boardData) {
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
+            StringBuilder boardToSave = new StringBuilder();
+            for (int[] fieldsY : boardData) {
+                for (int fieldsX : fieldsY) {
+                    boardToSave.append(fieldsX).append("/");
+                }
             }
+
+
+            editor.putString(BOARD, boardToSave.toString());
+            editor.apply();
         }
 
+        public int[][] loadBoardData() {
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            String boardData = sharedPreferences.getString(BOARD, null);
 
-        editor.putString(BOARD, boardToSave.toString());
-        editor.apply();
-    }
-    public int[][] loadBoardData() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        String boardData = sharedPreferences.getString(BOARD, null);
-
-        if (boardData == null) {
-            return null;
-        }
-
-        int[][] newBoard = new int[][]{{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
-        String[] values = boardData.split(getString(R.string.Devider));
-
-        int iterator = 0;
-        for (int i = 0; i < newBoard.length; i++) {
-            for (int j = 0; j < newBoard[i].length; j++) {
-                newBoard[i][j] = Integer.parseInt(values[iterator]);
-                iterator++;
+            if (boardData == null) {
+                return null;
             }
+
+            int[][] newBoard = new int[][]{{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
+            String[] values = boardData.split(getString(R.string.Devider));
+
+            int iterator = 0;
+            for (int i = 0; i < newBoard.length; i++) {
+                for (int j = 0; j < newBoard[i].length; j++) {
+                    newBoard[i][j] = Integer.parseInt(values[iterator]);
+                    iterator++;
+                }
+            }
+
+            return newBoard;
         }
 
-        return newBoard;
+        // Score
+        public void saveScore(int score) {
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(SCORE, score);
+            editor.apply();
+        }
+
+        public int loadScore() {
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            return sharedPreferences.getInt(SCORE, 0);
+        }
+
+        // Best Score
+        public void saveBestScore(int bestScore) {
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(BEST_SCORE, bestScore);
+            editor.apply();
+        }
+
+        public int loadBestScore() {
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            return sharedPreferences.getInt(BEST_SCORE, 0);
+        }
     }
 
-    // Score
-    public void saveScore(int score){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(SCORE, score);
-        editor.apply();
-    }
-    public int loadScore(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        return sharedPreferences.getInt(SCORE, 0);
-    }
+    private final class SwipeListener implements View.OnTouchListener {
+        // Initialization
+        GestureDetector gestureDetector;
 
-    // Best Score
-    public void saveBestScore(int bestScore){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(BEST_SCORE, bestScore);
-        editor.apply();
-    }
-    public int loadBestScore(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        return sharedPreferences.getInt(BEST_SCORE, 0);
+        public SwipeListener(View view){
+            int threshold = 100;
+            int velocity_threshold = 100;
+
+            GestureDetector.SimpleOnGestureListener listener =
+                new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onDown(@NonNull MotionEvent e) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
+                        float xDiff = e2.getX() - e1.getX();
+                        float yDiff = e2.getY() - e1.getY();
+
+                        try {
+                            if (Math.abs(xDiff) > Math.abs((yDiff))){
+                                if(Math.abs(xDiff) > threshold && Math.abs(velocityX) > velocity_threshold){
+                                    if(xDiff > 0){
+                                        // Swipe right
+                                        if(actionRightAvaliable){
+                                            displayGameState(game.gameActionRight());
+                                        }
+                                    } else {
+                                        // Swipe left
+                                        if(actionLeftAvaliable){
+                                            displayGameState(game.gameActionLeft());
+                                        }
+                                    }
+                                    return true;
+                                }
+                            } else {
+                                if (Math.abs(yDiff) > threshold && Math.abs(velocityY) > velocity_threshold) {
+                                    if (yDiff > 0) {
+                                        // Swipe down
+                                        if(actionBottomAvaliable){
+                                            displayGameState(game.gameActionBottom());
+                                        }
+                                    } else {
+                                        // Swipe up
+                                        if(actionTopAvaliable){
+                                            displayGameState(game.gameActionTop());
+                                        }
+                                    }
+                                    return true;
+                                }
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        return false;
+                    }
+                };
+
+            gestureDetector = new GestureDetector(listener);
+            view.setOnTouchListener(this);
+        }
+        @SuppressLint("ClickableViewAccessibility")
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return gestureDetector.onTouchEvent(event);
+        }
+
     }
 }

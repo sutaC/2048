@@ -11,6 +11,7 @@ id btnReset
 id btnRight
 id btnTop
 id gridLayout
+id layoutMain
 id textView1
 id textView10
 id textView11
