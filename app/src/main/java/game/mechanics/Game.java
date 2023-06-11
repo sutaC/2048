@@ -7,11 +7,12 @@ public class Game {
 
     private int[][] gameBoard = new int[][]{{0, 0, 0, 0},{0, 0, 0, 0},{0, 0, 0, 0},{0, 0, 0, 0}};
 
-    boolean actionTopAvaliable = false;
-    boolean actionRightAvaliable = false;
-    boolean actionBottomAvaliable = false;
-    boolean actionLeftAvaliable = false;
+    private boolean actionTopAvaliable = false;
+    private boolean actionRightAvaliable = false;
+    private boolean actionBottomAvaliable = false;
+    private boolean actionLeftAvaliable = false;
 
+    private int score = 0;
 
     public Game(){
         generateNewCells(2, 4);
@@ -19,33 +20,30 @@ public class Game {
         checkActions();
     }
 
-    public Game(int[][] board){
+    public Game(int[][] board, int score){
         gameBoard = board;
+        this.score = score;
 
         checkActions();
     }
 
     // Cell generation
-    private int checkSpaceAvaliable() {
-        int quantity = 0;
-
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                if(gameBoard[i][j] == 0) {
-                    quantity++;
-                }
-            }
-        }
-
-        return quantity;
-    }
 
     private void generateNewCells(int min, int max) {
 
         Random random = new Random();
 
         int quantity = random.nextInt(max - min) + min;
-        quantity = Math.min(quantity, checkSpaceAvaliable());
+
+        int avaliableQuantity = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if(gameBoard[i][j] == 0) {
+                    avaliableQuantity++;
+                }
+            }
+        }
+        quantity = Math.min(quantity, avaliableQuantity);
 
         int indexX, indexY;
 
@@ -244,6 +242,7 @@ public class Game {
                             false,
                             false,
                             gameBoard,
+                            score,
                             'W'
                     );
                 }
@@ -261,6 +260,7 @@ public class Game {
                     false,
                     false,
                     gameBoard,
+                    score,
                     'L'
             );
         }
@@ -272,6 +272,7 @@ public class Game {
                 actionLeftAvaliable,
                 actionBottomAvaliable,
                 gameBoard,
+                score,
                 ' '
         );
     }
@@ -311,6 +312,8 @@ public class Game {
                 } else if (gameBoard[tmpMoveIndex][x] == gameBoard[y][x]){
                     gameBoard[tmpMoveIndex][x] = gameBoard[y][x] * 2;
                     gameBoard[y][x] = 0;
+
+                    score += gameBoard[tmpMoveIndex][x];
                 }
             }
         }
@@ -355,6 +358,8 @@ public class Game {
                 } else if (gameBoard[y][tmpMoveIndex] == gameBoard[y][x]){
                     gameBoard[y][tmpMoveIndex] = gameBoard[y][x] * 2;
                     gameBoard[y][x] = 0;
+
+                    score+= gameBoard[y][tmpMoveIndex];
                 }
             }
         }
@@ -397,6 +402,8 @@ public class Game {
                 } else if (gameBoard[tmpMoveIndex][x] == gameBoard[y][x]){
                     gameBoard[tmpMoveIndex][x] = gameBoard[y][x] * 2;
                     gameBoard[y][x] = 0;
+
+                    score+= gameBoard[tmpMoveIndex][x];
                 }
             }
         }
@@ -439,6 +446,8 @@ public class Game {
                 } else if (gameBoard[y][tmpMoveIndex] == gameBoard[y][x]){
                     gameBoard[y][tmpMoveIndex] = gameBoard[y][x] * 2;
                     gameBoard[y][x] = 0;
+
+                    score += gameBoard[y][tmpMoveIndex];
                 }
             }
         }
@@ -451,6 +460,7 @@ public class Game {
         for (int[] fields : gameBoard) {
             Arrays.fill(fields, 0);
         }
+        score = 0;
 
         generateNewCells(2, 4);
         checkActions();
@@ -461,6 +471,7 @@ public class Game {
                 actionLeftAvaliable,
                 actionBottomAvaliable,
                 gameBoard,
+                score,
                 'R'
         );
     }
@@ -478,6 +489,7 @@ public class Game {
                             false,
                             false,
                             gameBoard,
+                            score,
                             'W'
                     );
                 }
@@ -492,6 +504,7 @@ public class Game {
                     false,
                     false,
                     gameBoard,
+                    score,
                     'L'
             );
         }
@@ -503,6 +516,7 @@ public class Game {
                 actionLeftAvaliable,
                 actionBottomAvaliable,
                 gameBoard,
+                score,
                 ' '
         );
     }

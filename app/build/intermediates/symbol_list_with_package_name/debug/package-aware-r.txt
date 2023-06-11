@@ -2992,7 +2992,9 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
+id tvBestScore
 id tvGameState
+id tvScore
 id unchecked
 id uniform
 id unlabeled
@@ -3225,6 +3227,8 @@ string abc_toolbar_collapse_description
 string androidx_startup
 string app_name
 string appbar_scrolling_view_behavior
+string basic_best_score
+string basic_score
 string bottom_sheet_behavior
 string bottomsheet_action_expand_halfway
 string character_counter_content_description

@@ -9,6 +9,8 @@ public class GameState {
 
     public int[][] gameBoard;
 
+    public int score;
+
     public char gameEnd;
 
     public GameState(
@@ -17,6 +19,7 @@ public class GameState {
                 boolean actionLeftAvaliable,
                 boolean actionBottomAvaliable,
                 int[][] gameBoard,
+                int score,
                 char gameEnd
     ){
 
@@ -27,6 +30,8 @@ public class GameState {
        this.actionLeftAvaliable = actionLeftAvaliable;
 
        this.gameBoard = gameBoard;
+
+       this.score = score;
 
        this.gameEnd = gameEnd;
     }

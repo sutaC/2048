@@ -5,6 +5,8 @@
     <color name="white">#FFFFFFFF</color>
     <string name="Devider">/</string>
     <string name="app_name">2048</string>
+    <string name="basic_best_score">Best Score: 0</string>
+    <string name="basic_score">Score: 0</string>
     <string name="empty">-</string>
     <string name="gameActionBottom">Bottom</string>
     <string name="gameActionLeft">Left</string>

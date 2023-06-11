@@ -27,13 +27,17 @@ id textView6
 id textView7
 id textView8
 id textView9
+id tvBestScore
 id tvGameState
+id tvScore
 layout activity_main
 mipmap ic_launcher
 mipmap ic_launcher_foreground
 mipmap ic_launcher_round
 string Devider
 string app_name
+string basic_best_score
+string basic_score
 string empty
 string gameActionBottom
 string gameActionLeft

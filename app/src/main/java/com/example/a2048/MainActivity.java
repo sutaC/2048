@@ -1,5 +1,6 @@
 package com.example.a2048;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     // Android objects
     TextView[] board = new TextView[16];
 
-    TextView tvGameState;
+    TextView tvGameState, tvScore, tvBestScore;
     Button btnTop, btnRight, btnBottom, btnLeft, btnReset;
 
     // Game
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
             btnReset = findViewById(R.id.btnReset);
 
             tvGameState = findViewById(R.id.tvGameState);
+            tvScore = findViewById(R.id.tvScore);
+            tvBestScore = findViewById(R.id.tvBestScore);
         }
 
         /* Game setup */ {
@@ -60,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             if (savedBoardData == null) {
                 game = new Game();
             } else {
-                game = new Game(savedBoardData);
+                game = new Game(savedBoardData, loadScore());
             }
 
             displayGameState(game.getGameState());
@@ -75,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Display
+    @SuppressLint("SetTextI18n")
     private void displayGameState(GameState state){
 
         // Set buttons availability
@@ -97,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
                 tvGameState.setText(R.string.game_over);
                 break;
         }
+
+        // Display score
+        tvScore.setText("Score: " + state.score);
 
         // Display board
         String[] colorPalet = new String[]{
@@ -131,15 +139,27 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        // Sets Best Score
+
+        if(loadBestScore() < state.score){
+            saveBestScore(state.score);
+            tvBestScore.setText("Best Score: " + state.score);
+        }
+
         // Saves game state
         saveBoardData(state.gameBoard);
+        saveScore(state.score);
+
     }
 
 
     /* Saving game data */
     private static final String SHARED_PREFS = "sharedPrefs";
     private static final String BOARD = "board";
+    private  static  final  String SCORE = "score";
+    private  static  final  String BEST_SCORE = "bestScore";
 
+    // Board
     public void saveBoardData ( int[][] boardData){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -156,7 +176,6 @@ public class MainActivity extends AppCompatActivity {
         editor.putString(BOARD, boardToSave.toString());
         editor.apply();
     }
-
     public int[][] loadBoardData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         String boardData = sharedPreferences.getString(BOARD, null);
@@ -179,4 +198,27 @@ public class MainActivity extends AppCompatActivity {
         return newBoard;
     }
 
+    // Score
+    public void saveScore(int score){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SCORE, score);
+        editor.apply();
+    }
+    public int loadScore(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        return sharedPreferences.getInt(SCORE, 0);
+    }
+
+    // Best Score
+    public void saveBestScore(int bestScore){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(BEST_SCORE, bestScore);
+        editor.apply();
+    }
+    public int loadBestScore(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        return sharedPreferences.getInt(BEST_SCORE, 0);
+    }
 }

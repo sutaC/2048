@@ -1,11 +1,11 @@
 [
     {
-        "merged": "C:\\Users\\48570\\.gradle\\daemon\\8.0\\com.example.a2048.app-merged_res-29:\\mipmap-xxhdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\48570\\.gradle\\daemon\\8.0\\com.example.a2048.app-main-31:\\mipmap-xxhdpi\\ic_launcher.png"
-    },
-    {
         "merged": "C:\\Users\\48570\\.gradle\\daemon\\8.0\\com.example.a2048.app-merged_res-29:\\mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
         "source": "C:\\Users\\48570\\.gradle\\daemon\\8.0\\com.example.a2048.app-main-31:\\mipmap-xxxhdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\48570\\.gradle\\daemon\\8.0\\com.example.a2048.app-merged_res-29:\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\48570\\.gradle\\daemon\\8.0\\com.example.a2048.app-main-31:\\mipmap-xxhdpi\\ic_launcher.png"
     },
     {
         "merged": "C:\\Users\\48570\\.gradle\\daemon\\8.0\\com.example.a2048.app-merged_res-29:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
